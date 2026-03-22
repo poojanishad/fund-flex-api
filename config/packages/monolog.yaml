@@ -1,0 +1,19 @@
+monolog:
+  channels: ["transfer"]
+
+  handlers:
+    main:
+      type: stream
+      path: "%kernel.logs_dir%/app.log"
+      level: info
+
+    error:
+      type: stream
+      path: "%kernel.logs_dir%/error.log"
+      level: error
+
+    transfer:
+      type: stream
+      path: "%kernel.logs_dir%/transfer.log"
+      level: info
+      channels: ["transfer"]

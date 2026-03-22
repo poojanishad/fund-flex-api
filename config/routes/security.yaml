@@ -1,0 +1,1 @@
+# Security routes intentionally empty — API is stateless (no session/logout).

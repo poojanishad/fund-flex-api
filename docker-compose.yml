@@ -1,0 +1,55 @@
+version: '3.9'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      APP_ENV: dev
+      APP_SECRET: change_me_in_production
+      DATABASE_URL: mysql://app:app@db:3306/fund_transfer?serverVersion=8.0&charset=utf8mb4
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      # Generate with: php -r "echo password_hash('secret', PASSWORD_BCRYPT);"
+      API_USER_EMAIL: admin@example.com
+      API_USER_PASSWORD_HASH: '$2y$12$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi'  # "password"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    volumes:
+      - ./var/log:/app/var/log
+
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: fund_transfer
+      MYSQL_USER: app
+      MYSQL_PASSWORD: app
+      MYSQL_ROOT_PASSWORD: root
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "app", "-papp"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  db_data:

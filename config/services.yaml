@@ -1,0 +1,30 @@
+parameters:
+    app.api_user_email:    '%env(API_USER_EMAIL)%'
+    app.api_password_hash: '%env(API_USER_PASSWORD_HASH)%'
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'
+
+    App\Controller\:
+        resource: '../src/Controller/'
+        tags: ['controller.service_arguments']
+
+    App\Controller\AuthController:
+        arguments:
+            $apiUserEmail:    '%app.api_user_email%'
+            $apiPasswordHash: '%app.api_password_hash%'
+
+    Predis\Client:
+        arguments:
+            - scheme: 'tcp'
+              host:   '%env(REDIS_HOST)%'
+              port:   '%env(int:REDIS_PORT)%'
