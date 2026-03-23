@@ -21,7 +21,8 @@ class TransferService
         private readonly LoggerInterface $logger,
         private readonly Client $redis,
         private readonly RequestStack $requestStack,
-        private readonly AuditService $auditService
+        private readonly AuditService $auditService,
+        private readonly int $rateLimitMax = 10
     ) {}
 
     public function transfer(TransferRequest $dto): array
@@ -145,7 +146,8 @@ class TransferService
     }
 
     /**
-     * Simple Redis sliding counter: max 10 requests per IP per 60 seconds.
+     * Simple Redis sliding counter: max $rateLimitMax requests per IP per 60 seconds.
+     * The limit is injected so it can be raised in non-production environments (e.g. tests).
      */
     private function checkRateLimit(): void
     {
@@ -159,7 +161,7 @@ class TransferService
             $this->redis->expire($key, 60);
         }
 
-        if ($count > 10) {
+        if ($count > $this->rateLimitMax) {
             throw new TooManyRequestsHttpException(60, 'Rate limit exceeded: max 10 requests per minute');
         }
     }

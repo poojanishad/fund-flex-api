@@ -16,7 +16,11 @@ class TransferRequest
 
     #[Assert\NotBlank]
     #[Assert\Positive]
-    public float $amount;
+    #[Assert\Regex(
+        pattern: '/^\d+(\.\d{1,2})?$/',
+        message: 'Amount must be a positive number with up to 2 decimal places'
+    )]
+    public string $amount;
 
     #[Assert\NotBlank]
     public string $referenceId;

@@ -8,10 +8,6 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 
-/**
- * Validates Bearer token on every /api/* request except /api/login.
- * Tokens are issued by AuthController and stored in Redis with a 1-hour TTL.
- */
 class ApiAuthListener implements EventSubscriberInterface
 {
     public function __construct(private readonly Client $redis) {}
@@ -29,7 +25,6 @@ class ApiAuthListener implements EventSubscriberInterface
 
         $path = $event->getRequest()->getPathInfo();
 
-        // Only guard /api/* — skip the login endpoint itself
         if (!str_starts_with($path, '/api/') || $path === '/api/login') {
             return;
         }
@@ -41,10 +36,15 @@ class ApiAuthListener implements EventSubscriberInterface
             return;
         }
 
-        $token = substr($auth, 7);
+        $token     = substr($auth, 7);
+        $redisKey  = "auth_token:{$token}";
+        $accountId = $this->redis->get($redisKey);
 
-        if (!$this->redis->exists("auth_token:{$token}")) {
+        if (!$accountId) {
             $event->setResponse(new JsonResponse(['error' => 'Invalid or expired token'], 401));
+            return;
         }
+
+        $event->getRequest()->attributes->set('auth.account_id', (int) $accountId);
     }
 }

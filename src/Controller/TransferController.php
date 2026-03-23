@@ -29,22 +29,26 @@ class TransferController
             return new JsonResponse(['error' => 'Invalid request'], 400);
         }
 
-        $dto = new TransferRequest();
-        $dto->fromAccount = (int)$data['fromAccount'];
-        $dto->toAccount   = (int)$data['toAccount'];
-        $dto->amount      = (float)$data['amount'];
-        $dto->referenceId = $data['referenceId'];
-
         $key = $request->headers->get('Idempotency-Key');
         if (!$key) {
             return new JsonResponse(['error' => 'Idempotency-Key missing'], 400);
         }
 
+        $authAccountId = $request->attributes->get('auth.account_id');
+        if ((int) $data['fromAccount'] !== $authAccountId) {
+            return new JsonResponse(['error' => 'You can only transfer from your own account'], 403);
+        }
+
+        $dto = new TransferRequest();
+        $dto->fromAccount   = (int) $data['fromAccount'];
+        $dto->toAccount     = (int) $data['toAccount'];
+        $dto->amount        = (string) $data['amount'];
+        $dto->referenceId   = $data['referenceId'];
         $dto->idempotencyKey = $key;
 
         $errors = $validator->validate($dto);
         if (count($errors) > 0) {
-            return new JsonResponse(['error' => (string)$errors], 400);
+            return new JsonResponse(['error' => (string) $errors], 400);
         }
 
         try {

@@ -31,12 +31,33 @@ class IdempotencyKey
         }
     }
 
-    public function getKey(): string { return $this->key; }
-    public function setKey(string $key): self { $this->key = $key; return $this; }
+    public function getKey(): string
+    {
+        return $this->key;
+    }
+    public function setKey(string $key): self
+    {
+        $this->key = $key;
+        return $this;
+    }
 
-    public function getResponse(): array { return $this->response; }
-    public function setResponse(array $response): self { $this->response = $response; return $this; }
+    public function getResponse(): array
+    {
+        return $this->response;
+    }
+    public function setResponse(array $response): self
+    {
+        $this->response = $response;
+        return $this;
+    }
 
-    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
-    public function setCreatedAt(\DateTimeImmutable $date): self { $this->createdAt = $date; return $this; }
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    public function setCreatedAt(\DateTimeImmutable $date): self
+    {
+        $this->createdAt = $date;
+        return $this;
+    }
 }

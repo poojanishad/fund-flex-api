@@ -2,3 +2,9 @@ framework:
   lock:
     resources:
       default: '%env(REDIS_URL)%'
+
+when@test:
+  framework:
+    lock:
+      resources:
+        default: flock

@@ -37,14 +37,38 @@ class AuditLog
         }
     }
 
-    public function getId(): ?int { return $this->id; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
 
-    public function getEventType(): string { return $this->eventType; }
-    public function setEventType(string $eventType): self { $this->eventType = $eventType; return $this; }
+    public function getEventType(): string
+    {
+        return $this->eventType;
+    }
+    public function setEventType(string $eventType): self
+    {
+        $this->eventType = $eventType;
+        return $this;
+    }
 
-    public function getPayload(): array { return $this->payload; }
-    public function setPayload(array $payload): self { $this->payload = $payload; return $this; }
+    public function getPayload(): array
+    {
+        return $this->payload;
+    }
+    public function setPayload(array $payload): self
+    {
+        $this->payload = $payload;
+        return $this;
+    }
 
-    public function getCreatedAt(): \DateTimeImmutable { return $this->createdAt; }
-    public function setCreatedAt(\DateTimeImmutable $createdAt): self { $this->createdAt = $createdAt; return $this; }
+    public function getCreatedAt(): \DateTimeImmutable
+    {
+        return $this->createdAt;
+    }
+    public function setCreatedAt(\DateTimeImmutable $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
 }

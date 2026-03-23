@@ -1,11 +1,11 @@
-parameters:
-    app.api_user_email:    '%env(API_USER_EMAIL)%'
-    app.api_password_hash: '%env(API_USER_PASSWORD_HASH)%'
+parameters: {}
 
 services:
     _defaults:
         autowire: true
         autoconfigure: true
+        bind:
+            int $rateLimitMax: '%env(int:RATE_LIMIT_MAX)%'
 
     App\:
         resource: '../src/'
@@ -18,13 +18,22 @@ services:
         resource: '../src/Controller/'
         tags: ['controller.service_arguments']
 
-    App\Controller\AuthController:
-        arguments:
-            $apiUserEmail:    '%app.api_user_email%'
-            $apiPasswordHash: '%app.api_password_hash%'
-
     Predis\Client:
         arguments:
             - scheme: 'tcp'
               host:   '%env(REDIS_HOST)%'
               port:   '%env(int:REDIS_PORT)%'
+
+when@test:
+    services:
+        _defaults:
+            autowire: true
+            autoconfigure: true
+            public: true
+
+        App\Tests\Stub\FakeRedisClient:
+            public: true
+
+        Predis\Client:
+            alias: App\Tests\Stub\FakeRedisClient
+            public: true

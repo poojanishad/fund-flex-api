@@ -18,20 +18,16 @@ class AuditService
         try {
             $audit = new AuditLog();
 
-            // ✅ event type (TRANSFER_SUCCESS, FAILED etc)
             $audit->setEventType($eventType);
 
-            // ✅ full payload store (debug + audit)
             $audit->setPayload($payload);
 
-            // ✅ timestamp
             $audit->setCreatedAt(new \DateTimeImmutable());
 
             $this->em->persist($audit);
-            $this->em->flush(); // ✅ IMPORTANT (instant insert)
+            $this->em->flush();
 
         } catch (\Throwable $e) {
-            // ❌ audit should NEVER break main flow
             $this->logger->error('Audit failed', [
                 'event' => $eventType,
                 'error' => $e->getMessage()
