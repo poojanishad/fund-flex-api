@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # Fund Transfer API
 
 A secure, production-ready REST API for transferring funds between accounts, built with **PHP 8.3 + Symfony 7.4 + MySQL 8 + Redis 7**.
@@ -303,13 +302,4 @@ php bin/phpunit --testdox
 - **`GET /api/transfer/{referenceId}`** — poll transaction status by reference
 - **`GET /api/accounts/{id}/balance`** — balance lookup endpoint
 - **Distributed lock** (`SET NX` in Redis) as a guard layer before the DB row lock
-- **Multi-user auth** — user table with hashed passwords instead of a single env credential
-- **Refresh tokens** with shorter access-token TTL (e.g. 15 min access / 7 day refresh)
-- **Async audit** via Symfony Messenger + RabbitMQ to decouple from the hot write path
-- **Structured JSON logging** with request correlation IDs across services
-- **OpenAPI / Swagger** spec auto-generated from route attributes
-- **k6 load tests** against `/api/transfer` to validate behaviour under concurrent pressure
-- **DB read replica** for balance queries under heavy read load
-=======
-# fintech-plex
->>>>>>> 1f05daa02482c5ac79e5706d184d14b053e77aa9
+
