@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Fund Transfer API
 
 A secure, production-ready REST API for transferring funds between accounts, built with **PHP 8.3 + Symfony 7.4 + MySQL 8 + Redis 7**.
@@ -309,3 +310,6 @@ php bin/phpunit --testdox
 - **OpenAPI / Swagger** spec auto-generated from route attributes
 - **k6 load tests** against `/api/transfer` to validate behaviour under concurrent pressure
 - **DB read replica** for balance queries under heavy read load
+=======
+# fintech-plex
+>>>>>>> 1f05daa02482c5ac79e5706d184d14b053e77aa9
