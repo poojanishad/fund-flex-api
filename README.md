@@ -137,21 +137,22 @@ php -S localhost:8000 -t public/
 
 ### `POST /api/login`
 
-Exchange credentials for a Bearer token. No auth required.
+Exchange credentials for a Bearer token. 
 
 **Request body**
 ```json
 {
-  "email":    "admin@example.com",
-  "password": "your_password"
+    "login": "user1@test.com",
+    "password": "alpha123"
 }
 ```
 
 **200 OK**
 ```json
 {
-  "token":      "a3f1c8e2...64 hex chars...",
-  "expires_in": 3600
+    "token": "ab97c5d4cfd8dd5dcc69188aa9b8ac9d63d3a5cab97b5b0d40841c715895f4a9",
+    "expires_in": 3600,
+    "account_id": 1
 }
 ```
 
